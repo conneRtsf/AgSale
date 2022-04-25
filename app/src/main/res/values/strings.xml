@@ -14,7 +14,7 @@
     <string name="vegetableCost">菜苗成本</string>
     <string name="other_cost">其他成本</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank shareFragment</string>
     <string name="share">共享田园</string>
     <string name="woman">女生</string>
     <string name="man">男生</string>
