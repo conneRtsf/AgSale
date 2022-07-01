@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 布局尺寸，你能在任何地方添加 -->
+
     <dimen name="dp_m_60">-60dp</dimen>
+    <dimen name="dp_m_55">-55dp</dimen>
+    <dimen name="dp_m_50">-50dp</dimen>
+    <dimen name="dp_m_40">-40dp</dimen>
     <dimen name="dp_m_30">-30dp</dimen>
     <dimen name="dp_m_20">-20dp</dimen>
     <dimen name="dp_m_12">-12dp</dimen>
@@ -425,4 +429,5 @@
     <dimen name="sp_42">42sp</dimen>
     <dimen name="sp_48">48sp</dimen>
     <dimen name="_sp_50">-50sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

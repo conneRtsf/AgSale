@@ -3,7 +3,10 @@ package com.example.agsale.base;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
@@ -22,11 +25,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.agsale.mvp.ui.my.AddressActivity;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -55,12 +63,16 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
             contentView.setLayoutParams(layoutParams);
             FrameLayout frameLayout = view.findViewById(R.id.base_contentView);
             frameLayout.addView(contentView);
-            if (ImmersionBar.isSupportStatusBarDarkFont()) {
-                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(true).navigationBarEnable(false).init();
-            } else {
-                ImmersionBar.with(this).statusBarColor(R.color.gray).keyboardEnable(true).statusBarDarkFont(true).navigationBarEnable(false).init();
-            }
+//            if (ImmersionBar.isSupportStatusBarDarkFont()) {
+//                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(true).navigationBarEnable(false).init();
+//            } else {
+//                ImmersionBar.with(this).statusBarColor(R.color.gray).keyboardEnable(true).statusBarDarkFont(true).navigationBarEnable(false).init();
+//            }
             setContentView(view);
+            if (android.os.Build.VERSION.SDK_INT > 9) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            }
 //            setActivityComponent(MyApplication.getMyApplication().getAppComponent());
             if (mPresenter != null) mPresenter.attachView(this);
             ButterKnife.bind(this);
@@ -292,7 +304,7 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // 如果你的 app 可以横竖屏切换，并且适配 4.4 或者 emui3 手机请务必在 onConfigurationChanged 方法里添加这句话
-        ImmersionBar.with(this).init();
+//        ImmersionBar.with(this).init();
     }
 
     @Override
@@ -319,4 +331,29 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
         }
         return sb.toString().trim();
     }
+    public Bitmap returnBitMap(String url) {
+        System.out.println(url);
+        if (url==null){
+            return null;
+        }
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
 }

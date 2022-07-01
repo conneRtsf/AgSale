@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".mvp.ui.main.MainActivity"
-    android:background="@color/背景色">
+    android:background="@color/grey_w">
 
     <FrameLayout
         android:id="@+id/container"
@@ -13,7 +13,7 @@
         android:layout_weight="1"/>
 
     <View
-        android:background="@color/blue"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"/>
 

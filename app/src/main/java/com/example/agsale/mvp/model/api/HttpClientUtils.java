@@ -3,6 +3,7 @@ package com.example.agsale.mvp.model.api;
 import android.util.Log;
 
 import com.example.agsale.base.Constant;
+import com.example.agsale.intercept.InformationIntercept;
 import com.example.agsale.mvp.model.api.support.LoggingInterceptor;
 import com.example.agsale.mvp.model.api.support.LoggingProduction;
 import com.example.agsale.mvp.model.api.support.LoggingSale;
@@ -16,6 +17,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -27,13 +29,11 @@ public class HttpClientUtils {
      * @return
      */
     public static OkHttpClient getOkhttpClick() {
-        LoggingInterceptor logging = new LoggingInterceptor(new MyLog());
-        logging.setLevel(LoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
                 .readTimeout(20 * 1000, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true) // 失败重发 关闭
-                .addInterceptor(logging)
+                .addInterceptor(new InformationIntercept())
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String s, SSLSession sslSession) {
@@ -105,6 +105,15 @@ public class HttpClientUtils {
     public static Retrofit getRetrofitWithGsonAdapter() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.API_BASE_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 添加Rx适配器
+                .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换器
+                .client(getOkhttpClick())
+                .build();
+        return retrofit;
+    }
+    public static Retrofit getRetrofitWithGsonAdapterConsumption() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.API_BASE_URL_consumption)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 添加Rx适配器
                 .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换器
                 .client(getOkhttpClick())

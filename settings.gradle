@@ -1,5 +1,5 @@
 
-rootProject.name = "newAg"
+rootProject.name = "saleAg"
 include ':app'
 include ':lib_basequickadapter'
 //include ':lib'
